@@ -44,8 +44,8 @@ def delete_activity(request):
     return HttpResponse(json.dumps(activities))
 
 def is_user_exist(request):
-    name = request.GET['name']
-    pw = request.GET['pw']
+    name = request.POST['name']
+    pw = request.POST['pw']
     user = auth.authenticate(username=name,password=pw)
     if user is None:
         return HttpResponse('False')

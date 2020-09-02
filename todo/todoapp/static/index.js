@@ -51,15 +51,23 @@ function login_section(){
 }
 
 function isUserValid(name,pw){
-  var url = 'is_user_exist?name='+name+'&pw='+pw;
+  var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+  alert(csrf);
+  //var url = 'is_user_exist?name='+name+'&pw='+pw;
+  var url = 'is_user_exist/';
   var req = new XMLHttpRequest();
   //req.onreadystatechange = function() {
   //  if (this.readyState == 4 && this.status == 200) {
       
   //  }
   //};
-  req.open("GET", url, false);
-  req.send();
+  data = {
+    csrfmiddlewaretoken : csrf,
+    name : name,
+    pw : pw
+  }
+  req.open("POST", url, true);
+  req.send(data);
   return req.responseText;
 }
 
