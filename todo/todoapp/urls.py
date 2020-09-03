@@ -8,5 +8,4 @@ urlpatterns = [
     path('get_activity/', views.get_activity, name='getActivity'),
     path('delete_activity/', views.delete_activity, name='deleteActivity'),
     path('is_user_exist/', views.is_user_exist, name='is_user_exist'),
-    #path('logout/',views.logout, name='logout'),
 ]

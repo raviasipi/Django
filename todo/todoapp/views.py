@@ -2,7 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse,Http404
 from .models import Activity,ActivitySerializer
 from django.contrib.auth.models import auth,User
-from django.views.decorators.csrf import csrf_exempt
+import datetime
+#from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
@@ -15,7 +16,8 @@ def index(request):
 def add_activity(request):
     activity_text = request.GET['activity']
     user_name = request.GET['user_name']
-    activity = Activity(activity= activity_text,username=user_name) 
+    target_date = request.GET['target_date']
+    activity = Activity(activity= activity_text,username=user_name,create_date=datetime.datetime.now(),target_date=target_date) 
     try:
         activity.save()
         activities = get_all_activities(user_name)
@@ -52,7 +54,6 @@ def is_user_exist(request):
     if request.method == 'POST':
         import json;
         data = json.loads(request.body.decode('utf-8'))
-        #print(data)
         name = data['name']
         pw = data['pw']
         user = auth.authenticate(username=name,password=pw)

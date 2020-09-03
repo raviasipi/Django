@@ -7,6 +7,7 @@ function home(){
   login_bt.onclick = function(){
     var user_name_text = document.getElementById('user_name').value;
     var password_text = document.getElementById('password').value;
+    if (user_name_text != "" && password_text!= ""){
     user_name = user_name_text;
     if(isUserValid(user_name_text,password_text)=='True'){
       //alert("login Successful");
@@ -26,6 +27,10 @@ function home(){
     else{
       alert("Entered name or password is not valid");
     }
+  }
+  else{
+    alert("username or password cannot be null");
+  }
   }
 }
 
@@ -98,19 +103,19 @@ function activity_form(){
   date_label.innerText = "Target date : ";
   date_label.setAttribute("for", "activity_date");
 
-  var activity_date = document.createElement('input');
-  activity_date.className = "p-1 border mx-auto";
-  activity_date.setAttribute("type", "date");
-  activity_date.id = "activity_date";
+  var target_date = document.createElement('input');
+  target_date.className = "p-1 border mx-auto";
+  target_date.setAttribute("type", "datetime-local");
+  target_date.id = "target_date";
 
   var activity_save_btn = document.createElement('button');
-  activity_save_btn.className = "btn btn-lg btn-success float-right";
+  activity_save_btn.className = "btn btn-md btn-success float-right";
   activity_save_btn.innerHTML = "Save Activity";
   activity_save_btn.id = "activity_save_button";
   activity_div.appendChild(section_name);
   activity_div.appendChild(activity_txt);
   activity_div.appendChild(date_label);
-  activity_div.appendChild(activity_date);
+  activity_div.appendChild(target_date);
   activity_div.appendChild(activity_save_btn);
 }
 
@@ -132,8 +137,11 @@ function showActivity(){
 
 function saveActivity(){
     var activity = document.getElementById('activity_text').value;
+    var target_date = document.getElementById('target_date').value;
     //alert('activity '+activity+' has been saved');
-    var url = 'add_activity?activity='+activity+'&user_name='+user_name;
+
+    if (activity != "" && target_date!= ""){
+    var url = 'add_activity?activity='+activity+'&user_name='+user_name+'&target_date='+target_date;
 
     var req = new XMLHttpRequest();
     req.onreadystatechange = function() {
@@ -142,10 +150,15 @@ function saveActivity(){
           var data = eval(this.responseText);
           createTable(data);
           document.getElementById('activity_text').value = '';
+          document.getElementById('target_date').value = '';
       }
     };
     req.open("GET", url, true);
     req.send();
+  }
+  else{
+    alert("Activity or target date is null");
+  }
 }
 
 
@@ -155,15 +168,25 @@ function createTable(data){
     show_activity_div.className = "col-lg-10 mx-auto p-3 m-3";
     show_activity_div.innerHTML= "";
     var table = document.createElement('TABLE');
+
+    var row_title = table.insertRow(0);
+    var target_date_title = row_title.insertCell(0);
+    var activity_title = row_title.insertCell(1);
+    var removeActiviy_title = row_title.insertCell(2);
+    //assgining cell variables with data
+    target_date_title.innerHTML = "Target Date";
+    activity_title.innerHTML = "Activity";
+    removeActiviy_title.innerHTML = "Delete/Complete";
+
     for (var i=0;i<data.length;i++){
         //creating a row
-        var row = table.insertRow(i);
+        var row = table.insertRow(i+1);
         //creating cells for rows
-        var id = row.insertCell(0);
+        var target_date = row.insertCell(0);
         var activity = row.insertCell(1);
         var removeActiviy = row.insertCell(2);
-        //assgining cell variables with data
-        id.innerHTML = data[i].id;
+        //assgining cell variables with data///
+        target_date.innerHTML = data[i].target_date.slice(0,10)+" "+data[i].target_date.slice(11,-3);
         activity.innerHTML = data[i].activity;
         removeActiviy.id = data[i].id;
         //remove activity styling
@@ -191,4 +214,4 @@ function deleteActivity(){
     };
     req.open("GET", url, true);
     req.send();
-}
+} 
