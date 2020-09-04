@@ -15,7 +15,7 @@
       <h1 class="alert alert-info">To Do Activity</h1>
     </div>
 
-    <div class="col-lg-8 rounded border border-success p-4 m-4 mx-auto" id="container">
+    <div class="col-lg-8 rounded border border-success p-2 m-2 mx-auto" id="container">
       <!-- login -->
       {% csrf_token %}
       <div id = "login">
@@ -38,5 +38,6 @@
   
     {% load static %}
     <script src="{% static 'index.js' %}"></script>
+    {% csrf_token %}
   </body>
 </html>

@@ -3,6 +3,7 @@ from django.http import HttpResponse,Http404
 from .models import Activity,ActivitySerializer
 from django.contrib.auth.models import auth,User
 import datetime
+#from django.views.decorators.csrf import ensure_csrf_cookie
 #from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
@@ -72,3 +73,22 @@ def is_user_exist(request):
             return HttpResponse('False')
         else:
             return HttpResponse('True')  
+
+#@ensure_csrf_cookie
+def register(request):
+    if request.method == 'POST':
+        import json;
+        data = json.loads(request.body.decode('utf-8'))
+        name = data['name']
+        pw = data['pw']
+        email = data['email']
+
+        #user_check = User.objects.get(username=name)
+        #email = User.objects.get(Emailaddress=email)
+        try:
+            user = User.objects.get(username=name)
+            return HttpResponse('False')
+        except User.DoesNotExist:
+            user = User.objects.create_user(name,email,pw)
+            user.save()
+            return HttpResponse('True')

@@ -99,7 +99,15 @@ function registerActivity(){
   var register_confirm_password = document.getElementById('register_confirm_password').value
   if (register_user_name,register_email,register_password,register_confirm_password!= ""){
   if (register_password == register_confirm_password){
-    alert("successfully registered");  
+    var register_response = register(register_user_name,register_email,register_password) 
+    if (register_response=='True') {
+      alert("registration Successfull");
+      cancel();
+    }
+    else{
+      alert("username is already existing");
+    }
+
   }
   else {
     alert("password mismatch");
@@ -117,8 +125,8 @@ function cancel(){
 
 function login_section(){
   var login_div=document.getElementById('login');
-  login_div.className = "col-lg-6 p-3 m-3 border mx-auto";
-  login_div.innerHTML = "Login Form";
+  login_div.className = "col-lg-8 p-1 m-1 mx-auto";
+  login_div.innerHTML = "Login";
   var user_name = document.createElement('input');
   user_name.className = "form-control p-3 m-3 border mx-auto";
   user_name.setAttribute("type", "text");
@@ -142,6 +150,25 @@ function login_section(){
   login_div.appendChild(password);
   login_div.appendChild(register_btn);
   login_div.appendChild(login_btn);
+}
+
+function register(register_user_name,register_email,register_password){
+  var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+  var url = 'register/';
+  var response_text ;
+  //var params = 'name=' +name+'&amp;pw='+pw;
+  var req = new XMLHttpRequest();
+
+  req.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      response_text = this.responseText;
+    }
+  };
+
+  req.open("POST", url, false);
+  req.setRequestHeader("X-CSRFToken", csrftoken);
+  req.send(JSON.stringify({"name":register_user_name,"email":register_email,"pw":register_password}));
+  return response_text  
 }
 
 function isUserValid(name,pw){
@@ -174,19 +201,19 @@ function activity_section(){
 
 function activity_form(){
   var activity_div=document.getElementById('activity');
-  activity_div.className = "col-lg-6 p-3 m-3 border mx-auto";
+  activity_div.className = "col-lg-10 p-3 m-3 border mx-auto";
 
   var section_name = document.createElement('p');
   section_name.innerText = "Add Activity";
 
   var activity_txt = document.createElement('input');
-  activity_txt.className = "form-control p-3 m-3 border mx-auto";
+  activity_txt.className = "form-control p-1 m-1 border mx-auto";
   activity_txt.setAttribute("type", "text");
   activity_txt.setAttribute("placeholder", "Type To Do Activity");
   activity_txt.id = "activity_text";
 
   var date_label = document.createElement('label');
-  date_label.className = "p-3 mx-auto";
+  date_label.className = "p-1 mx-auto";
   date_label.innerText = "Target date : ";
   date_label.setAttribute("for", "activity_date");
 
@@ -252,7 +279,7 @@ function saveActivity(){
 function createTable(data){
     var data = data
     var show_activity_div = document.getElementById('show-activities');
-    show_activity_div.className = "col-lg-10 mx-auto p-3 m-3";
+    show_activity_div.className = "col-lg-10 mx-auto p-1 m-3";
     show_activity_div.innerHTML= "";
     var table = document.createElement('TABLE');
 
@@ -271,7 +298,8 @@ function createTable(data){
     for (var i=0;i<data.length;i++){
         //creating a row
         var row = table.insertRow(i+1);
-        row.style = "text-align:center;font-weight:normal"
+        row.style = "text-align:center;font-weight:normal;"
+        row.className = "text-break"
         //creating cells for rows
         var target_date = row.insertCell(0);
         var activity = row.insertCell(1);

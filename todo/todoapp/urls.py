@@ -9,4 +9,6 @@ urlpatterns = [
     path('delete_activity/', views.delete_activity, name='deleteActivity'),
     path('complete_activity/', views.complete_activity, name='completeActivity'),
     path('is_user_exist/', views.is_user_exist, name='is_user_exist'),
+    path('register/', views.register, name='register'),
 ]
+
