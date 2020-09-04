@@ -4,6 +4,7 @@ function home(){
   login_section()
   var login_bt = document.getElementById('login_button');
   var login_success = document.getElementById('login');
+  
   login_bt.onclick = function(){
     var user_name_text = document.getElementById('user_name').value;
     var password_text = document.getElementById('password').value;
@@ -25,13 +26,93 @@ function home(){
       activity_section();
     }
     else{
-      alert("Entered name or password is not valid");
+      alert("Username & Password is not valid");
     }
   }
   else{
-    alert("username or password cannot be null");
+    alert("Username & Password cannot be blank");
   }
   }
+
+  var register_bt = document.getElementById('register_button');
+  register_bt.onclick = registerSection
+
+}
+
+
+function registerSection(){
+  var popup_div = document.createElement('div');
+  popup_div.className = "form-control p-3 m-3 border mx-auto";
+  popup_div.innerHTML = "Register";
+  popup_div.id = "popup_div";
+
+  var register_user_name = document.createElement('input');
+  register_user_name.className = "form-control p-3 m-3 border mx-auto";
+  register_user_name.setAttribute("type", "text");
+  register_user_name.setAttribute("placeholder", "username");
+  register_user_name.id = "register_user_name";
+  var register_email = document.createElement('input');
+  register_email.className = "form-control p-3 m-3 border mx-auto";
+  register_email.setAttribute("type", "email");
+  register_email.setAttribute("placeholder", "Email");
+  register_email.id = "register_email";
+  var register_password = document.createElement('input');
+  register_password.className = "form-control p-3 m-3 border mx-auto";
+  register_password.setAttribute("type", "text");
+  register_password.setAttribute("placeholder", "password");
+  register_password.id = "register_password";
+  var register_confirm_password = document.createElement('input');
+  register_confirm_password.className = "form-control p-3 m-3 border mx-auto";
+  register_confirm_password.setAttribute("type", "text");
+  register_confirm_password.setAttribute("placeholder", "confirm password");
+  register_confirm_password.id = "register_confirm_password";
+  var register_div_btn = document.createElement('button');
+  register_div_btn.className = "btn btn-md p-2 m-1 btn-success float-right";
+  register_div_btn.innerHTML = "Register";
+  register_div_btn.id = "register_div_button";
+
+  var cancel_btn = document.createElement('button');
+  cancel_btn.className = "btn btn-md p-2 m-1 btn-success float-right";
+  cancel_btn.innerHTML = "Cancel";
+  cancel_btn.id = "cancel_button";
+
+  popup_div.appendChild(register_user_name);
+  popup_div.appendChild(register_email);
+  popup_div.appendChild(register_password);
+  popup_div.appendChild(register_confirm_password);
+  popup_div.appendChild(cancel_btn);
+  popup_div.appendChild(register_div_btn);
+  popup_div.style = "display:block;position:fixed;z-index:1;padding:50px;margin:50px;top:0;left:5%;width:90%;height:400px;background-color:white ; ";
+  document.body.appendChild(popup_div);
+
+  var register_div_bt = document.getElementById('register_div_button')
+  register_div_bt.onclick = registerActivity
+
+  var cancel_bt = document.getElementById('cancel_button')
+  cancel_bt.onclick = cancel
+}
+
+function registerActivity(){
+  var register_user_name = document.getElementById('register_user_name').value
+  var register_email = document.getElementById('register_email').value
+  var register_password = document.getElementById('register_password').value
+  var register_confirm_password = document.getElementById('register_confirm_password').value
+  if (register_user_name,register_email,register_password,register_confirm_password!= ""){
+  if (register_password == register_confirm_password){
+    alert("successfully registered");  
+  }
+  else {
+    alert("password mismatch");
+  }
+  }
+  else{
+    alert("Some Fields are blank");
+  }
+}
+
+function cancel(){
+  document.getElementById('popup_div').style = "display:none";
+  document.body.removeChild(popup_div);
 }
 
 function login_section(){
@@ -49,11 +130,17 @@ function login_section(){
   password.setAttribute("placeholder", "password");
   password.id = "password";
   var login_btn = document.createElement('button');
-  login_btn.className = "btn btn-lg btn-success float-right";
+  login_btn.className = "btn btn-md p-2 m-1 btn-success float-right";
   login_btn.innerHTML = "Login";
   login_btn.id = "login_button";
+  var register_btn = document.createElement('button');
+  register_btn.className = "btn btn-md p-2 m-1 btn-warning float-right";
+  register_btn.innerHTML = "Register";
+  register_btn.id = "register_button";
+
   login_div.appendChild(user_name);
   login_div.appendChild(password);
+  login_div.appendChild(register_btn);
   login_div.appendChild(login_btn);
 }
 
@@ -157,7 +244,7 @@ function saveActivity(){
     req.send();
   }
   else{
-    alert("Activity or target date is null");
+    alert("Activity & Target date cannot be blank");
   }
 }
 
@@ -170,36 +257,72 @@ function createTable(data){
     var table = document.createElement('TABLE');
 
     var row_title = table.insertRow(0);
+    row_title.style = "text-align:center;font-weight:bold"
     var target_date_title = row_title.insertCell(0);
     var activity_title = row_title.insertCell(1);
-    var removeActiviy_title = row_title.insertCell(2);
+    var complete_activity_title = row_title.insertCell(2);
+    var delete_activiy_title = row_title.insertCell(3);
     //assgining cell variables with data
     target_date_title.innerHTML = "Target Date";
     activity_title.innerHTML = "Activity";
-    removeActiviy_title.innerHTML = "Delete/Complete";
+    complete_activity_title.innerHTML = "Complete";
+    delete_activiy_title.innerHTML = "Delete";
 
     for (var i=0;i<data.length;i++){
         //creating a row
         var row = table.insertRow(i+1);
+        row.style = "text-align:center;font-weight:normal"
         //creating cells for rows
         var target_date = row.insertCell(0);
         var activity = row.insertCell(1);
-        var removeActiviy = row.insertCell(2);
+        var complete_activiy = row.insertCell(2);
+        var delete_activiy = row.insertCell(3);
         //assgining cell variables with data///
         target_date.innerHTML = data[i].target_date.slice(0,10)+" "+data[i].target_date.slice(11,-3);
         activity.innerHTML = data[i].activity;
-        removeActiviy.id = data[i].id;
-        //remove activity styling
-        removeActiviy.innerHTML = '&times;';
-        removeActiviy.className = "text-danger text-center";
-        removeActiviy.style.cursor = "pointer";
+        complete_activiy.id = data[i].id;
+        delete_activiy.id = data[i].id;
+        //complete activity styling
+        if (data[i].completed.length==2){
+        complete_activiy.innerHTML = '&#10004;';
+        complete_activiy.className = "text-success text-center";
+        complete_activiy.style.cursor = "pointer";
+        complete_activiy.onclick = completeActivity
+        }
+        else{
+          complete_activiy.innerHTML = data[i].completed;
+          complete_activiy.className = "text-success text-center";
+          target_date.className = "text-success text-center";
+          activity.className = "text-success text-center";
+          complete_activiy.style="text-decoration: line-through;";
+          target_date.style = "text-decoration: line-through;";
+          activity.style = "text-decoration: line-through;";
+        }
+        //delete activity styling
+        delete_activiy.innerHTML = '&times;';
+        delete_activiy.className = "text-danger text-center";
+        delete_activiy.style.cursor = "pointer";
         //calling delelte activity function 
-        removeActiviy.onclick = deleteActivity
+        delete_activiy.onclick = deleteActivity
     }
     table.className = 'table table-striped'
     show_activity_div.appendChild(table);
 }
 
+
+function completeActivity(){
+  var id = this.id;
+  var url = 'complete_activity?id='+id+'&user_name='+user_name;
+  var req = new XMLHttpRequest();
+  req.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      var data = eval(this.responseText);
+      createTable(data);
+    }
+  };
+  req.open("GET", url, true);
+  req.send();
+}
 
 
 function deleteActivity(){

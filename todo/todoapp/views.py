@@ -17,7 +17,7 @@ def add_activity(request):
     activity_text = request.GET['activity']
     user_name = request.GET['user_name']
     target_date = request.GET['target_date']
-    activity = Activity(activity= activity_text,username=user_name,create_date=datetime.datetime.now(),target_date=target_date) 
+    activity = Activity(activity= activity_text,username=user_name,create_date=datetime.datetime.now(),target_date=target_date,completed='NO') 
     try:
         activity.save()
         activities = get_all_activities(user_name)
@@ -39,6 +39,17 @@ def get_activity(request):
     activities = get_all_activities(username)
     import json
     return HttpResponse(json.dumps(activities))
+
+def complete_activity(request):
+    username = request.GET['user_name']
+    id = request.GET['id']
+    activity = Activity.objects.get(id=id)
+    activity.completed = 'YES'
+    activity.save()
+    activities = get_all_activities(username)
+    import json
+    return HttpResponse(json.dumps(activities))
+
 
 def delete_activity(request):
     username = request.GET['user_name']

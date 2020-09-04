@@ -6,7 +6,7 @@ class Activity(models.Model):
     username = models.CharField(max_length=20)
     create_date = models.DateTimeField(auto_now=False)
     target_date = models.DateTimeField(auto_now=False)
-
+    completed = models.CharField(max_length=3)
 
 # serializer classes
 from rest_framework import serializers
@@ -16,5 +16,6 @@ class ActivitySerializer(serializers.Serializer):
     username = serializers.CharField(max_length=20)
     create_date = serializers.DateTimeField()
     target_date = serializers.DateTimeField()
+    completed = serializers.CharField(max_length=1)
     id = serializers.IntegerField()
 
